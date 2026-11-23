@@ -59,7 +59,12 @@ pub fn report(opts: &Options) -> Result<Card> {
     let crate_dir = opts
         .crate_dir
         .canonical()
-        .with_context(|| format!("resolving {}", opts.crate_dir.display()))?;
+        .with_context(|| {
+            format!(
+                "resolving {} (run `rust-anything bridge` first)",
+                opts.crate_dir.display()
+            )
+        })?;
     let manifest = Manifest::load(&crate_dir)?;
     harness::build(&crate_dir)?;
     let diff = harness::diff(&harness::DiffOptions {
